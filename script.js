@@ -8,24 +8,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Active Link Highlighting
     const navItems = document.querySelectorAll('.nav-links-modern a');
-    const sections = document.querySelectorAll('section');
+    const sections = document.querySelectorAll('section, header');
 
     function highlightNav() {
         let scrollY = window.pageYOffset;
+        let currentSectionId = '';
+
         sections.forEach(current => {
             const sectionHeight = current.offsetHeight;
-            const sectionTop = current.offsetTop - 100;
+            const sectionTop = current.offsetTop - 150; // Increased offset for better bridge
             const sectionId = current.getAttribute('id');
 
-            if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
-                navItems.forEach(item => {
-                    item.classList.remove('active-nav');
-                    if (item.getAttribute('href') === '#' + sectionId) {
-                        item.classList.add('active-nav');
-                    }
-                });
+            if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+                currentSectionId = sectionId;
             }
         });
+
+        if (currentSectionId) {
+            navItems.forEach(item => {
+                item.classList.remove('active-nav');
+                if (item.getAttribute('href') === '#' + currentSectionId) {
+                    item.classList.add('active-nav');
+                }
+            });
+        }
     }
     window.addEventListener('scroll', highlightNav);
 
